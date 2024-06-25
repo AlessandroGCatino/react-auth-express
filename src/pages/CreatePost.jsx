@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import Form from "../components/Form";
-import axios from "axios";
-const apiUrl = import.meta.env.VITE_BASE_API_URL;
+import axios from "../axiosSetup";
 
 
 
@@ -11,15 +10,13 @@ export default function(){
 
     const [tags, setTags] = useState([]);
     const getTags = async () => {
-        const url = `${apiUrl}/tags`;
-        const { data: array } = await axios.get(url);
+        const { data: array } = await axios.get(`/tags`);
         setTags(array);
     }
   
     const [categories, setCategories] = useState([]);
     const getCategorie = async () => {
-        const url = `${apiUrl}/categories`;
-        const { data: array } = await axios.get(url);
+        const { data: array } = await axios.get(`/categories`);
         setCategories(array);
     }
   

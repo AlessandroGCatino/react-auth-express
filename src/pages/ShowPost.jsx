@@ -1,7 +1,7 @@
-import axios from "axios";
+import axios from "../axiosSetup";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-const apiUrl = import.meta.env.VITE_BASE_API_URL;
+
 
 export default function (){
 
@@ -11,7 +11,7 @@ export default function (){
 
     const getPosts = async () => {
         setPost(null);
-        const url = `${apiUrl}/posts/${slug}`;
+        const url = `/posts/${slug}`;
         const { data: response } = await axios.get(url);
         setPost(response);
     }
