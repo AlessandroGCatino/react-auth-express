@@ -1,11 +1,13 @@
 import axios from "../axiosSetup";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 
 export default function (){
 
     const {slug} = useParams()
+    const {isLoggedIn} = useAuth
 
     const [post, setPost] = useState(null);
 
@@ -27,6 +29,7 @@ export default function (){
             {!post && "Loading..."}
             {post && 
             <>
+                {!isLoggedIn && <Link to={`/posts/${slug}/edit`}><button>Modifica Post</button></Link>}
                 <h1>{post.title}</h1>
                 <figure>
                     <img src={post.image} alt={post.title} />

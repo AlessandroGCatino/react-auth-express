@@ -1,40 +1,41 @@
-// import { createContext, useContext } from "react";
-// import useStorage from "../hooks/useStorage";
+import { createContext, useContext, useEffect, useState } from "react";
+import axios from "../axiosSetup";
 
-// const GlobalContext = createContext();
+const GlobalContext = createContext();
 
-// const GlobalProvider = ({children}) => {
+const GlobalProvider = ({children}) => {
 
-//     const [userName, setUserName] = useStorage(null, 'userName');
+    const [tags, setTags] = useState([]);
+    const [categories, setCategories] = useState([]);
 
+    const fetchData = async () => {
+        const { data: tagsData } = await axios.get(`/tags`);
+        const { data: categoriesData } = await axios.get(`/categories`);
+        setTags(tagsData);
+        setCategories(categoriesData);
+    }
+
+    useEffect(() => {
+        fetchData();
+    },[]);
     
-//     const setUsername = (payload) => {
-//         setUserName(payload)
-//     }
-    
-//     const clearUserName = () => {
-//         localStorage.removeItem('userName');
-//     }
-    
-//     const value = {
-//         userName,
-//         setUsername,
-//         clearUserName,
-//     };
-    
-//     return (
-//         <GlobalContext.Provider value={value}>
-//             {children}
-//         </GlobalContext.Provider>
-//     )
-// }
+    return(
+        <GlobalContext.Provider value={{
+            tags,
+            categories
+        }}>
+            {children}
+        </GlobalContext.Provider>
+    )
+}
 
-// const useGlobal = () => {
-//     const value = useContext(GlobalContext);
-//     if(value === undefined){
-//         throw new Error('Non sei dentro al Context Provider.');
-//     }
-//     return value;
-// }
+const useGlobal = () => {
+    const value = useContext(GlobalContext);
+    //se non sono in un consumer del GlobalContext.Provider, value sarà undefined
+    if(value === undefined){
+        throw new Error('Non sei dentro al Global Provider!');
+    }
+    return value;
+}
 
-// export {GlobalProvider, useGlobal};
+export { GlobalProvider, useGlobal }

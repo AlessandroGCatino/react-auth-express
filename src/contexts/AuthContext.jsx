@@ -14,13 +14,11 @@ const AuthProvider = ({children}) => {
 
     const login = async (payload) => {
         try{
-            const response = await axios.post('/auth/login', payload);
-            console.log(response)
+            const { data: response } = await axios.post('/auth/login', payload);
             setUser(response.data);
-            localStorage.setItem('accessToken', response.data.token);
+            localStorage.setItem('accessToken', response.token);
             navigate('/');
         }catch(err){
-            console.log(err)
             const { errors } = err.response.data;
             const error = new Error(errors ? 'Errore di Login' : err.response.data);
             error.errors = errors;

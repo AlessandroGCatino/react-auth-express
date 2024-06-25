@@ -7,6 +7,8 @@ import IndexPage from './pages/IndexPage.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import PrivateArea from './middlewares/PrivateArea.jsx';
 import LoginPage from './pages/LoginPage.jsx';
+import EditPost from './pages/EditPost.jsx';
+import { GlobalProvider } from './contexts/GlobalContext.jsx';
 
 
 
@@ -14,23 +16,27 @@ function App() {
 
   return (
     <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-              <Route path="/" element={<LayoutStandard/>}>
-                  <Route index element={<HomePage/>} />
-                  <Route path="login" element={<LoginPage/>}/>
-                  <Route path="posts">
-                      <Route index element={<IndexPage/>}/>
-                      <Route path=":slug">
-                          <Route index element={<PrivateArea>
-                            <ShowPost/>
-                            </PrivateArea>}/>
-                      </Route>
-                      <Route path="create" element={<CreatePost/>}/>
+     <GlobalProvider>
+      <AuthProvider>
+        <Routes>
+            <Route path="/" element={<LayoutStandard/>}>
+              <Route index element={<HomePage/>} />
+              <Route path="login" element={<LoginPage/>}/>
+              <Route path="posts">
+                  <Route index element={<IndexPage/>}/>
+                  <Route path=":slug">
+                      <Route index 
+                      element={<PrivateArea>
+                                  <ShowPost/>
+                              </PrivateArea>}/>
+                    <Route path="edit" element={<EditPost/>}/>
                   </Route>
+                  <Route path="create" element={<CreatePost/>}/>
               </Route>
-          </Routes>
-        </AuthProvider>
+            </Route>
+        </Routes>
+      </AuthProvider>
+     </GlobalProvider>
     </BrowserRouter> 
   )
   
