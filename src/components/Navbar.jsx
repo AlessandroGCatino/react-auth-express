@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router-dom"
 import { useAuth } from "../contexts/AuthContext"
-import { useGlobal } from "../contexts/GlobalContext"
+
 import { useEffect } from "react"
 
 const urlPages = [
@@ -17,11 +17,6 @@ const urlPages = [
 export default function(){
 
     const { isLoggedIn, logout } = useAuth()
-    let { userName } = useGlobal()
-
-    useEffect(() => {
-    
-    }, [userName])
 
     return (
         <header>

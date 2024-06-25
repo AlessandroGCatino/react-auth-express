@@ -7,7 +7,6 @@ import IndexPage from './pages/IndexPage.jsx';
 import { AuthProvider } from './contexts/AuthContext.jsx';
 import PrivateArea from './middlewares/PrivateArea.jsx';
 import LoginPage from './pages/LoginPage.jsx';
-import { GlobalProvider } from './contexts/GlobalContext.jsx';
 
 
 
@@ -15,7 +14,6 @@ function App() {
 
   return (
     <BrowserRouter>
-      <GlobalProvider>
         <AuthProvider>
           <Routes>
               <Route path="/" element={<LayoutStandard/>}>
@@ -33,7 +31,6 @@ function App() {
               </Route>
           </Routes>
         </AuthProvider>
-      </GlobalProvider>
     </BrowserRouter> 
   )
   

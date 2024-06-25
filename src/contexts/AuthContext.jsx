@@ -1,29 +1,42 @@
 import { createContext, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useStorage from "../hooks/useStorage";
-import { useGlobal } from "./GlobalContext";
+import axios from "../axiosSetup";
 
 const AuthContext = createContext();
 
 const AuthProvider = ({children}) => {
 
     const navigate = useNavigate();
-    const { clearUserName } = useGlobal()
 
-    const [isLoggedIn, setIsLoggedIn] = useStorage(false, 'isLoggedIn');
+    const [user, setUser] = useStorage(null, 'user');
+    const isLoggedIn = user !== null;
 
-    const login = (payload, redirectTo) => {
-        setIsLoggedIn(true);
-        navigate(redirectTo || '/');
+    const login = async (payload) => {
+        try{
+            const response = await axios.post('/auth/login', payload);
+            console.log(response)
+            setUser(response.data);
+            localStorage.setItem('accessToken', response.data.token);
+            navigate('/');
+        }catch(err){
+            console.log(err)
+            const { errors } = err.response.data;
+            const error = new Error(errors ? 'Errore di Login' : err.response.data);
+            error.errors = errors;
+            throw error;
+        }
     }
 
     const logout = () => {
-        setIsLoggedIn(false);
-        clearUserName();
+        setUser(null);
+        localStorage.removeItem('user');
+        localStorage.removeItem('accessToken');
         navigate('/login');
     }
 
     const value = {
+        user,
         isLoggedIn,
         login,
         logout,

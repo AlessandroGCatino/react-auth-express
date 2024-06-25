@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react"
 import { MdDeleteForever } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "../axiosSetup";
+import {useAuth} from "../contexts/AuthContext"
 
 
 export default function({response, onPageChange}){
 
+    const {isLoggedIn} = useAuth()
+
+    const navigate = useNavigate()
+
     const [currPage, setCurrPage] = useState(1);
+
+    const deletePost = async (slug) => {
+        await axios.delete(`/posts/${slug}`);
+        onPageChange(currPage)
+    }
 
     useEffect(() => {
         onPageChange(currPage);
@@ -32,7 +43,8 @@ export default function({response, onPageChange}){
                 response.posts.map((p, index) => (
                     <div key={`listElement${index}`} className="postCard" >
                         <Link to={`/posts/${p.slug}`}>
-                        { <>
+                        { <div>
+
                         
                             <h2>{p.title}</h2>
                             <p>{p.content}</p>
@@ -42,11 +54,15 @@ export default function({response, onPageChange}){
                         <p>Categoria: {p.category.title}</p>
                         <p>Tags: {p.tags.map(el => el.title).join(', ')}</p>
                         <p className={p.published?"publ":"notPubl"}>{p.published? 'Pubblicato' : 'Non pubblicato'}</p>
-                        <button className="delete" onClick={() => setList(curr => curr.filter(el => el!== p))}>
-                            <MdDeleteForever/>
-                        </button>
-                        </>}
+                        </div>
+                        }
                         </Link>
+                        {isLoggedIn &&
+                            <button className="delete" onClick={() => deletePost(p.slug)}>
+                            <MdDeleteForever/>
+                            </button>
+                        }
+                        
                     </div>
                 ))
             }
